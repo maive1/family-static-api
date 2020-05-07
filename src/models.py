@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from random import randint
+import random
 
 db = SQLAlchemy()
 
@@ -36,8 +36,10 @@ class Family:
         return random.randint(0, 99999999)
 
     def add_member(self, member):
-        member['id'] = self._generateId(),
+        id = self._generateId()
+        member['id'] = id
         self._members.append(member)
+        return member
 
     def delete_member(self, id):
         self._members = [member for member in self._members if member['id'] != id]
@@ -47,7 +49,8 @@ class Family:
         self._members = [member for member in self._members if member['id'] != id]
 
     def get_member(self, id):
-        return  member = next(filter(lambda member: member.get('id') == id, self._members), None)
+        member = next(filter(lambda member: member.get('id') == id, self._members), None)
+        return member
 
 
     def get_all_members(self):
