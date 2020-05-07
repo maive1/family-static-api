@@ -30,28 +30,29 @@ def members():
     body = request.get_json()
 
     if request.method == 'GET':
-        if body is None:
-            raise APIException("You need to specify the request body as a json object", status_code=400)
-        else: 
-            family = Family('Doe')
-            members = family.get_all_members()
-            lucky_numbers = [member['lucky_numbers'] for member in members]
-            sum_of_lucky = sum([number for sub in lucky_numbers for number in sub])
+        family = Family('Doe')
+        members = family.get_all_members()
+        lucky_numbers = [member['lucky_numbers'] for member in members]
+        sum_of_lucky = sum([number for sub in lucky_numbers for number in sub])
 
-            response_body = {
-                "family_name": family.last_name,
-                "members": family.get_all_members(),
-                "lucky_numbers": lucky_numbers,
-                "sum_of_lucky": str(sum_of_lucky)
-            }
+        response_body = {
+            "family_name": family.last_name,
+            "members": family.get_all_members(),
+            "lucky_numbers": lucky_numbers,
+            "sum_of_lucky": str(sum_of_lucky)
+        }
 
-            return jsonify(response_body), 200
+        return jsonify(response_body), 200
     
     if request.method == 'POST':
-
-        family = Family('Doe')
-        response_body = family.add_member(body)
-        return jsonify(response_body),200
+        if body is not None:
+            family = Family('Doe')
+            body = request.get_json()
+            response_body = family.add_member(body)
+            
+            return jsonify(response_body),200
+        else:
+            raise APIException('You need to specify the request body as a json object', status_code=404)
 
 @app.route('/member/<int:member_id>', methods=['GET', 'DELETE'] )
 def single_member(member_id=None):
@@ -59,13 +60,10 @@ def single_member(member_id=None):
     body = request.get_json()
 
     if request.method == 'GET':
-        if body is not None:
-            family = Family('Doe')
-            response_body = family.get_member(member_id)
+        family = Family('Doe')
+        response_body = family.get_member(member_id)
 
-            return jsonify(response_body), 200
-        else:
-            raise APIException('You need to specify the request body as a json object', status_code=404)
+        return jsonify(response_body), 200
 
     if request.method == 'DELETE':
         family = Family('Doe')
