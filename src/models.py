@@ -11,21 +11,21 @@ class Family:
         self.last_name = last_name #Doe
         
         self._members = [{
-            "id": self._generateId(),
+            "id": 1,
             "first_name": "John",
             "age": 33,
             "gender": "Male",
             "lucky_numbers": [7,13,22]
         },
         {   
-            "id": self._generateId(),
+            "id": 2,
             "first_name": "Jane",
             "age": 35,
             "gender": "Female",
             "lucky_numbers": [10,14,3]
         },
         {
-            "id": self._generateId(),
+            "id": 3,
             "first_name": "Jimmy",
             "age": 5,
             "gender": "Male",
@@ -36,6 +36,7 @@ class Family:
         return random.randint(0, 99999999)
 
     def add_member(self, member):
+        member['id'] = self._generateId(),
         self._members.append(member)
 
     def delete_member(self, id):
